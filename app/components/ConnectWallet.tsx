@@ -1,0 +1,21 @@
+import clsx from "clsx";
+import React from "react";
+
+export const glowPillClasses =
+  "relative inline-flex items-center justify-center gap-3 overflow-hidden rounded-full border border-[#1FE9F759] px-10 py-3 text-[16px] font-medium tracking-[0.01em] text-[#1FE9F7] transition-all duration-200 ease-out select-none bg-[#050607] [background-image:radial-gradient(85%_65%_at_5%_0%,rgba(31,233,247,0.5),rgba(31,233,247,0.12)_55%,transparent_75%),linear-gradient(180deg,rgba(7,24,28,0.9)_0%,rgba(5,6,7,0.95)_40%,rgba(5,6,7,1)_100%)] shadow-[inset_0_0_14px_rgba(31,233,247,0.14)] hover:shadow-[inset_0_0_18px_rgba(31,233,247,0.22)] hover:text-[#68f5ff] hover:-translate-y-px focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#1FE9F7CC]";
+
+export const glowPillOverlayClasses =
+  "pointer-events-none absolute inset-[2px] rounded-full [background:linear-gradient(180deg,rgba(0,0,0,0.35),rgba(31,233,247,0.05)_45%,rgba(31,233,247,0.01)_75%,rgba(0,0,0,0.35))]";
+
+export const glowPillLabelClasses = "relative z-10";
+
+const ConnectWallet = () => {
+  return (
+    <button type="button" className={`${glowPillClasses} cursor-pointer`}>
+      <span className={glowPillLabelClasses}>Connect Wallet</span>
+      <span className={glowPillOverlayClasses} />
+    </button>
+  );
+};
+
+export default ConnectWallet;
