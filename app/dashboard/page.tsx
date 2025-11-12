@@ -9,14 +9,14 @@ export default function DashboardHomePage() {
 
   return (
     <div className="flex min-h-screen flex-col">
-      <main className="flex-1 overflow-y-auto px-12 py-8">
-        <section className="mb-16">
-          <div className="mb-7 flex items- justify-between gap-4">
+      <main className="flex-1 overflow-y-auto px-4 sm:px-6 md:px-8 lg:px-12 py-6 sm:py-8">
+        <section className="mb-12 sm:mb-16">
+          <div className="mb-6 sm:mb-7 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex flex-col gap-2">
-              <h2 className="text-[24px] font-semibold tracking-[0.01em] text-[#F2F4F5]">
+              <h2 className="text-[20px] sm:text-[24px] font-semibold tracking-[0.01em] text-[#F2F4F5]">
                 Trending This Week
               </h2>
-              <p className="text-[14px] text-[#ADBEBF]">
+              <p className="text-[12px] sm:text-[14px] text-[#ADBEBF]">
                 Discover, compare, and follow top-performing DeFi strategies
                 curated by experts.
               </p>
@@ -25,79 +25,83 @@ export default function DashboardHomePage() {
             <TimeRangeToggle />
           </div>
 
-          <div className="mb-10 border border-[#EDFCFE0F] rounded-md p-6">
-            <h3 className="text-[12px] font-semibold text-[#ADBEBF]">
+          <div className="mb-8 sm:mb-10 border border-[#EDFCFE0F] rounded-md p-4 sm:p-6">
+            <h3 className="text-[11px] sm:text-[12px] font-semibold text-[#ADBEBF]">
               7:45 AM MAR 10 2025
             </h3>
 
-            <div className=" flex items-center mt-3 gap-4 justify-between">
-              <div>
-                <h1 className="text-[32px] font-semibold tracking-[0.01em] text-[#F2F4F5]">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center mt-3 gap-4 sm:justify-between">
+              <div className="w-full sm:w-auto">
+                <h1 className="text-[24px] sm:text-[28px] lg:text-[32px] font-semibold tracking-[0.01em] text-[#F2F4F5]">
                   {featured?.title}
                 </h1>
-                <div className="flex items-center gap-2 w-fit text-[12px] rounded-full bg-[#EDFCFE0F] px-4 py-1 border border-[#EDFCFE0F]">
+                <div className="flex items-center gap-2 w-fit text-[11px] sm:text-[12px] rounded-full bg-[#EDFCFE0F] px-3 sm:px-4 py-1 border border-[#EDFCFE0F] mt-2">
                   <h1>Creator:</h1>
                   <Image
                     src="/icons/user_icon.svg"
                     alt="Creator"
-                    width={20}
-                    height={20}
+                    width={18}
+                    height={18}
+                    className="w-4 h-4 sm:w-5 sm:h-5"
                   />
                   <span className="text-[#5efbff]">{featured?.creator}</span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2">
-                <div className="flex items-center flex-col w-full sm:w-[142px] rounded-md gap-2 bg-[#070B0B] border border-[#EDFCFE0F] text-nowrap px-5 py-2.5">
+              <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+                <div className="flex items-center flex-col w-full sm:w-[120px] lg:w-[142px] rounded-md gap-2 bg-[#070B0B] border border-[#EDFCFE0F] px-3 sm:px-5 py-2 sm:py-2.5">
                   <div className="flex items-center gap-2">
                     <Image
                       src="/icons/diamond.svg"
                       alt="Diamond"
-                      width={20}
-                      height={20}
+                      width={18}
+                      height={18}
+                      className="w-4 h-4 sm:w-5 sm:h-5"
                     />
 
-                    <span className="text-[10px] font-semibold tracking-[0.01em] text-[#F2F4F5]">
+                    <span className="text-[9px] sm:text-[10px] font-semibold tracking-[0.01em] text-[#F2F4F5]">
                       Type
                     </span>
                   </div>
-                  <h2 className="text-[12px] font-semibold tracking-[0.01em] text-[#F2F4F5]">
+                  <h2 className="text-[11px] sm:text-[12px] font-semibold tracking-[0.01em] text-[#F2F4F5]">
                     {featured?.type}
                   </h2>
                 </div>
 
-                <div className="flex items-center flex-col w-full sm:w-[142px] rounded-md gap-2 bg-[#070B0B] border border-[#EDFCFE0F] text-nowrap px-5 py-2.5">
+                <div className="flex items-center flex-col w-full sm:w-[120px] lg:w-[142px] rounded-md gap-2 bg-[#070B0B] border border-[#EDFCFE0F] px-3 sm:px-5 py-2 sm:py-2.5">
                   <div className="flex items-center gap-2">
                     <Image
                       src="/icons/WarningDiamond.svg"
                       alt="Diamond"
-                      width={20}
-                      height={20}
+                      width={18}
+                      height={18}
+                      className="w-4 h-4 sm:w-5 sm:h-5"
                     />
 
-                    <span className="text-[10px] font-semibold tracking-[0.01em] text-[#F2F4F5]">
+                    <span className="text-[9px] sm:text-[10px] font-semibold tracking-[0.01em] text-[#F2F4F5]">
                       Risk
                     </span>
                   </div>
-                  <h2 className="text-[12px] font-semibold tracking-[0.01em] text-[#FCD34D]">
+                  <h2 className="text-[11px] sm:text-[12px] font-semibold tracking-[0.01em] text-[#FCD34D]">
                     {featured?.risk}
                   </h2>
                 </div>
 
-                <div className="flex items-center flex-col w-full sm:w-[142px] rounded-md gap-2 bg-[#070B0B] border border-[#EDFCFE0F] text-nowrap px-5 py-2.5">
+                <div className="flex items-center flex-col w-full sm:w-[120px] lg:w-[142px] rounded-md gap-2 bg-[#070B0B] border border-[#EDFCFE0F] px-3 sm:px-5 py-2 sm:py-2.5">
                   <div className="flex items-center gap-2">
                     <Image
                       src="/icons/Drop.svg"
                       alt="Diamond"
-                      width={20}
-                      height={20}
+                      width={18}
+                      height={18}
+                      className="w-4 h-4 sm:w-5 sm:h-5"
                     />
 
-                    <span className="text-[10px] font-semibold tracking-[0.01em] text-[#F2F4F5]">
+                    <span className="text-[9px] sm:text-[10px] font-semibold tracking-[0.01em] text-[#F2F4F5]">
                       Performance
                     </span>
                   </div>
-                  <h2 className="text-[12px] font-semibold tracking-[0.01em] text-[#46FFD7]">
+                  <h2 className="text-[11px] sm:text-[12px] font-semibold tracking-[0.01em] text-[#46FFD7]">
                     {featured?.performance}
                   </h2>
                 </div>
@@ -109,25 +113,25 @@ export default function DashboardHomePage() {
               alt="Bar chart"
               width={1000}
               height={1000}
-              className="w-full mt-4"
+              className="w-full h-[150px] sm:h-[180px] md:h-auto mt-4 object-cover md:object-contain"
             />
           </div>
         </section>
 
         <section>
-          <div className="mb-7 flex items-end justify-between gap-4">
+          <div className="mb-6 sm:mb-7 flex flex-col sm:flex-row items-start sm:items-end justify-between gap-4">
             <div className="flex flex-col gap-2">
-              <h2 className="text-[20px] font-semibold tracking-[0.01em] text-[#F2F4F5]">
+              <h2 className="text-[18px] sm:text-[20px] font-semibold tracking-[0.01em] text-[#F2F4F5]">
                 Explore Strategies
               </h2>
-              <p className="text-[14px] text-[#ADBEBF]">
+              <p className="text-[12px] sm:text-[14px] text-[#ADBEBF]">
                 Discover, compare, and follow top-performing DeFi strategies
                 curated by experts.
               </p>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 gap-6 xl:grid-cols-3 w-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 w-full">
             {STRATEGIES.map((strategy) => (
               <StrategyCard key={strategy.title} {...strategy} />
             ))}

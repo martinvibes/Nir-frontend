@@ -24,62 +24,65 @@ const StrategyCard = ({
   href = "#",
 }: StrategyCardProps) => {
   return (
-    <article className="relative flex min-h-[260px] z-20 flex-col justify-between gap-6 rounded-[28px] border border-[#1FE9F7]/20 px-6 pb-6 text-[#D4F7F9] shadow-[0_20px_36px_rgba(6,33,36,0.35),inset_0_0_18px_rgba(31,233,247,0.08)] [background:radial-gradient(160%_120%_at_50%_0%,rgba(31,233,247,0.25),rgba(3,9,10,0.9)),rgba(8,17,18,0.95)] overflow-hidden">
+    <article className="relative flex min-h-[280px] sm:min-h-[300px] z-20 flex-col justify-between gap-4 sm:gap-6 rounded-[24px] sm:rounded-[28px] border border-[#1FE9F7]/20 px-4 sm:px-6 pb-4 sm:pb-6 text-[#D4F7F9] shadow-[0_20px_36px_rgba(6,33,36,0.35),inset_0_0_18px_rgba(31,233,247,0.08)] [background:radial-gradient(160%_120%_at_50%_0%,rgba(31,233,247,0.25),rgba(3,9,10,0.9)),rgba(8,17,18,0.95)] overflow-hidden">
       {/* <ChartImage /> */}
 
-      <span className="badge-angled mb-10 mx-auto py-3!">{type}</span>
+      <span className="badge-angled mb-6 sm:mb-10 mx-auto py-2 sm:py-3 text-[11px] sm:text-xs">
+        {type}
+      </span>
 
-      <div className="absolute top-28 left-[35%] z-30 bg-[rgba(18,33,33,0.72)] creator-badge rounded-lg px-10 py-2">
-        <p className="mt-1 text-xs font-medium text-[#5AF3FB]">{creator}</p>
+      <div className="absolute top-20 sm:top-28 left-1/2 -translate-x-1/2 z-30 bg-[rgba(18,33,33,0.72)] creator-badge rounded-lg px-6 sm:px-10 py-1.5 sm:py-2">
+        <p className="text-[10px] sm:text-xs font-medium text-[#5AF3FB]">
+          {creator}
+        </p>
       </div>
 
       {/* Strategy Details */}
       <div
-        className=" mt-6 rounded-lg p-4 
+        className="mt-4 sm:mt-6 rounded-lg p-3 sm:p-4 
                 bg-[rgba(18,33,33,0.34)] 
                 bg-glass-blur-md
                 "
       >
-        <div className="relative z-10 flex flex-col space-y-2 mb-2 mt-4">
-          <h3 className="text-base font-semibold leading-snug text-[#F2F4F5]">
+        <div className="relative z-10 flex flex-col space-y-2 mb-2 mt-2 sm:mt-4">
+          <h3 className="text-sm sm:text-base font-semibold leading-snug text-[#F2F4F5]">
             {title}
           </h3>
-          <p className="relative z-10 text-xs text-wrap text-[#ADBEBF]">
+          <p className="relative z-10 text-[10px] sm:text-xs text-wrap text-[#ADBEBF] leading-relaxed">
             {description}
           </p>
         </div>
 
-        <div className="relative z-10 flex items-center justify-between gap-x-6 gap-y-3 text-xs uppercase tracking-[0.14em] text-[#79AFB3]">
-          <div className="flex items-center">
-            <span className="text-xs uppercase font-medium tracking-[0.14em] text-[#79AFB3]">
+        <div className="relative z-10 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-x-6 gap-y-2 sm:gap-y-3 text-[10px] sm:text-xs uppercase tracking-[0.14em] text-[#79AFB3]">
+          <div className="flex items-center gap-1 sm:gap-2">
+            <span className="text-[10px] sm:text-xs uppercase font-medium tracking-[0.14em] text-[#79AFB3]">
               Performance:{" "}
             </span>
-            <strong className=" block text-sm normal-case tracking-normal text-[#5AF3FB]">
-              {" "}
+            <strong className="text-xs sm:text-sm normal-case tracking-normal text-[#5AF3FB]">
               {performance}
             </strong>
           </div>
 
-          <div className="flex items-center">
-            <span className="text-xs tracking-[0.14em] text-[#D6D7D7]">
+          <div className="flex items-center gap-1 sm:gap-2">
+            <span className="text-[10px] sm:text-xs tracking-[0.14em] text-[#D6D7D7]">
               Risk:
             </span>
-            <strong className="block text-sm normal-case tracking-normal text-[#34C759]">
+            <strong className="text-xs sm:text-sm normal-case tracking-normal text-[#34C759]">
               {risk}
             </strong>
           </div>
         </div>
 
-        <div className="relative z-10 mt-4 flex items-center justify-between gap-3">
+        <div className="relative z-10 mt-3 sm:mt-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 sm:gap-3">
           <Link
-            className="text-sm font-medium text-[#79AFB3] strategy-badge rounded-lg px-5 py-2.5 w-full text-center"
+            className="text-xs sm:text-sm font-medium text-[#79AFB3] strategy-badge rounded-lg px-4 sm:px-5 py-2 sm:py-2.5 w-full text-center"
             href={href}
           >
             View Details
           </Link>
           <Link
             href={href}
-            className="text-sm font-medium text-[#1FE9F7] join-strategy-button bg-linear-to-r from-[#045358] to-[#045358] rounded-lg px-5 py-2.5 w-full text-center"
+            className="text-xs sm:text-sm font-medium text-[#1FE9F7] join-strategy-button bg-linear-to-r from-[#045358] to-[#045358] rounded-lg px-4 sm:px-5 py-2 sm:py-2.5 w-full text-center"
           >
             Join Strategy
           </Link>
