@@ -1,73 +1,12 @@
 import Image from "next/image";
 
-import FeaturedStrategy from "@/components/dashboard/FeaturedStrategy";
 import TimeRangeToggle from "@/components/dashboard/TimeRangeToggle";
 import StrategyCard from "@/components/dashboard/StrategyCard";
-import MetricChip from "@/components/dashboard/MetricChip";
-
-const STRATEGIES = [
-  {
-    title: "CrossChain Vault",
-    type: "Multi-Protocol",
-    creator: "jermiah",
-    description:
-      "Diversifies assets across Ethereum, Arbitrum, and Polygon yield vaults.",
-    performance: "+10.22%",
-    risk: "Low",
-    href: "/dashboard/strategies/vault-drip",
-  },
-  {
-    title: "Strategy Name",
-    type: "Yield Aggregator",
-    creator: "jermiah",
-    description:
-      "Auto-harvests and reinvests rewards across multiple farming pools.",
-    performance: "+13.56%",
-    risk: "Medium",
-    href: "/dashboard/strategies/vault-drip",
-  },
-  {
-    title: "EthGrow",
-    type: "Staking",
-    creator: "jermiah",
-    description: "Stakes ETH and compounds rewards daily for long-term gains.",
-    performance: "+6.41%",
-    risk: "Medium",
-    href: "/dashboard/strategies/vault-drip",
-  },
-  {
-    title: "StableFlow",
-    type: "Trading",
-    creator: "dl_flash",
-    description:
-      "Moves stablecoins between lending pools to earn the best rates.",
-    performance: "+7.84%",
-    risk: "Low",
-    href: "/dashboard/strategies/vault-drip",
-  },
-  {
-    title: "LendLoop",
-    type: "Lending",
-    creator: "mario_dev",
-    description:
-      "Lends on Aave, borrows stablecoins, and re-lends to maximize APY.",
-    performance: "+11.67%",
-    risk: "Medium",
-    href: "/dashboard/strategies/vault-drip",
-  },
-  {
-    title: "RapidSwap",
-    type: "Yield",
-    creator: "Ethan",
-    description:
-      "Automatically swaps tokens on multiple DEXs to profit from small price gaps.",
-    performance: "+15.12%",
-    risk: "High",
-    href: "/dashboard/strategies/vault-drip",
-  },
-];
+import { STRATEGIES } from "@/lib/data/strategies";
 
 export default function DashboardHomePage() {
+  const featured = STRATEGIES[0];
+
   return (
     <div className="flex min-h-screen flex-col">
       <main className="flex-1 overflow-y-auto px-12 py-8">
@@ -94,7 +33,7 @@ export default function DashboardHomePage() {
             <div className=" flex items-center mt-3 gap-4 justify-between">
               <div>
                 <h1 className="text-[32px] font-semibold tracking-[0.01em] text-[#F2F4F5]">
-                  Vault Drip
+                  {featured?.title}
                 </h1>
                 <div className="flex items-center gap-2 w-fit text-[12px] rounded-full bg-[#EDFCFE0F] px-4 py-1 border border-[#EDFCFE0F]">
                   <h1>Creator:</h1>
@@ -104,7 +43,7 @@ export default function DashboardHomePage() {
                     width={20}
                     height={20}
                   />
-                  <span className="text-[#5efbff]">seraph.eth</span>
+                  <span className="text-[#5efbff]">{featured?.creator}</span>
                 </div>
               </div>
 
@@ -123,7 +62,7 @@ export default function DashboardHomePage() {
                     </span>
                   </div>
                   <h2 className="text-[12px] font-semibold tracking-[0.01em] text-[#F2F4F5]">
-                    Yield Aggregator
+                    {featured?.type}
                   </h2>
                 </div>
 
@@ -141,7 +80,7 @@ export default function DashboardHomePage() {
                     </span>
                   </div>
                   <h2 className="text-[12px] font-semibold tracking-[0.01em] text-[#FCD34D]">
-                    Medium
+                    {featured?.risk}
                   </h2>
                 </div>
 
@@ -159,7 +98,7 @@ export default function DashboardHomePage() {
                     </span>
                   </div>
                   <h2 className="text-[12px] font-semibold tracking-[0.01em] text-[#46FFD7]">
-                    +9.8%
+                    {featured?.performance}
                   </h2>
                 </div>
               </div>

@@ -1,121 +1,166 @@
 import Link from "next/link";
+import { notFound } from "next/navigation";
 import { ArrowLeft } from "lucide-react";
-import MetricChip from "@/components/dashboard/MetricChip";
+import Image from "next/image";
+
 import StrategyCard from "@/components/dashboard/StrategyCard";
-
-const BAR_HEIGHTS = [
-  40, 64, 92, 70, 110, 84, 64, 96, 120, 72, 102, 80, 115, 90,
-];
-
-const RELATED = [
-  {
-    title: "Strategy Name",
-    type: "Yield Aggregator",
-    creator: "seraph.eth",
-    description:
-      "Moves stablecoins between lending pools to earn the best rates.",
-    performance: "+13.56%",
-    risk: "Medium",
-    href: "/dashboard/strategies/vault-drip",
-  },
-  {
-    title: "StableFlow",
-    type: "Trading",
-    creator: "dl_flash",
-    description: "Balances liquidity pools to stabilize returns.",
-    performance: "+7.84%",
-    risk: "Low",
-    href: "/dashboard/strategies/vault-drip",
-  },
-  {
-    title: "LendLoop",
-    type: "Lending",
-    creator: "mario_dev",
-    description: "Loops deposits and borrows to maximize APY.",
-    performance: "+11.67%",
-    risk: "Medium",
-    href: "/dashboard/strategies/vault-drip",
-  },
-];
+import { STRATEGIES, getStrategyBySlug } from "@/lib/data/strategies";
+import { Button } from "@/components/ui/button";
 
 interface StrategyPageProps {
-  params: { slug: string };
+  params: Promise<{ slug: string }>;
 }
 
-export default function StrategyDetailPage({ params }: StrategyPageProps) {
-  const name = params.slug
-    .split("-")
-    .map((word) => word[0]?.toUpperCase() + word.slice(1))
-    .join(" ");
+export default async function StrategyDetailPage({
+  params,
+}: StrategyPageProps) {
+  const { slug } = await params;
+  const strategy = getStrategyBySlug(slug);
+
+  if (!strategy) {
+    notFound();
+  }
+
+  const relatedStrategies = STRATEGIES.filter(
+    (item) => item.slug !== strategy.slug
+  ).slice(0, 3);
 
   return (
     <div className="flex min-h-screen flex-col">
       <main className="flex-1 overflow-y-auto px-12 py-8">
-        <Link
-          href="/dashboard"
-          className="mb-8 inline-flex items-center gap-3 text-sm uppercase tracking-[0.18em] text-[#5efbff]/80 transition hover:text-[#5efbff]"
-        >
-          <ArrowLeft size={18} strokeWidth={1.6} />
-          Back to Explore
-        </Link>
+        {/* Strategy Details */}
+        <div className="mb-10 border border-[#EDFCFE0F] rounded-md p-6">
+          <div className=" flex items-center mt-3 gap-4 justify-between">
+            <div className="flex items-start gap-4">
+              <Link
+                href="/dashboard"
+                className="text-[#5efbff]/80 transition hover:text-[#5efbff] self-start mt-[0.35em]"
+              >
+                <ArrowLeft size={22} strokeWidth={1.7} />
+              </Link>
 
-        <section className="mb-14 rounded-3xl border border-[#12383B] bg-[#071011]/90 p-10 shadow-[0_28px_56px_rgba(6,24,26,0.45)]">
-          <div className="flex flex-col gap-10 lg:flex-row">
-            <div className="flex-1 space-y-6">
-              <div>
-                <p className="text-sm uppercase tracking-[0.2em] text-[#7faeb1]">
-                  Strategy
-                </p>
-                <h1 className="mt-3 text-5xl font-semibold text-[#E7FDFF]">
-                  {name || "Vault Drip"}
+              <div className="flex flex-col gap-1">
+                <h1 className="text-[32px] font-semibold tracking-[0.01em] text-[#F2F4F5] leading-none">
+                  {strategy?.title}
                 </h1>
-                <p className="mt-2 text-[16px] text-[#8DB7BA]">
-                  Creator: <span className="text-[#5efbff]">seraph.eth</span>
-                </p>
-              </div>
 
-              <div className="grid gap-4 sm:grid-cols-3">
-                <MetricChip title="Type" value="Yield Aggregator" />
-                <MetricChip title="Risk" value="Medium" />
-                <MetricChip title="Performance" value="+9.8%" accent />
-              </div>
-
-              <p className="text-[15px] leading-7 text-[#8FB5B8]">
-                Vault Drip automatically allocates yield from multiple
-                stablecoin vaults into the most profitable pools, compounding
-                returns while minimizing manual adjustments. It continuously
-                evaluates risk and adjusts exposure to maintain the selected
-                profile.
-              </p>
-
-              <div>
-                <p className="text-xs uppercase tracking-[0.18em] text-[#6CF4FA]">
-                  Steps
-                </p>
-                <ul className="mt-4 space-y-3 text-[15px] text-[#9AC7CA]">
-                  <li>1. Lend on Compound</li>
-                  <li>2. Borrow on Aave</li>
-                  <li>3. Supply on Aave</li>
-                </ul>
+                <div className="flex items-center gap-2 w-fit text-[12px] rounded-full bg-[#EDFCFE0F] px-4 py-1 border border-[#EDFCFE0F]">
+                  <span className="text-[#F2F4F5]/70">Creator:</span>
+                  <Image
+                    src="/icons/user_icon.svg"
+                    alt="Creator"
+                    width={18}
+                    height={18}
+                    className="rounded-full"
+                  />
+                  <span className="text-[#5efbff] font-medium">
+                    {strategy?.creator}
+                  </span>
+                </div>
               </div>
             </div>
 
-            <div className="flex w-full flex-col justify-between gap-6 lg:w-96">
-              <div className="flex-1 rounded-3xl border border-[#12383B] bg-[#05090A]/80 p-8">
-                <h3 className="mb-6 text-sm uppercase tracking-[0.18em] text-[#6CF4FA]">
-                  Performance Overview
-                </h3>
-                <div className="flex h-48 items-end gap-3">
-                  {BAR_HEIGHTS.map((height, index) => (
-                    <span
-                      key={`detail-bar-${index}`}
-                      className="flex-1 rounded-t-full bg-linear-to-b from-[#5efbff] to-transparent opacity-90"
-                      style={{ height }}
+            <div className="flex items-center gap-4">
+              <div className="flex items-center gap-2">
+                <div className="flex items-center flex-col w-full sm:w-[142px] rounded-md gap-2 bg-[#070B0B] border border-[#EDFCFE0F] text-nowrap px-5 py-2.5">
+                  <div className="flex items-center gap-2">
+                    <Image
+                      src="/icons/diamond.svg"
+                      alt="Diamond"
+                      width={20}
+                      height={20}
                     />
-                  ))}
+
+                    <span className="text-[10px] font-semibold tracking-[0.01em] text-[#F2F4F5]">
+                      Type
+                    </span>
+                  </div>
+                  <h2 className="text-[12px] font-semibold tracking-[0.01em] text-[#F2F4F5]">
+                    {strategy?.type}
+                  </h2>
+                </div>
+
+                <div className="flex items-center flex-col w-full sm:w-[142px] rounded-md gap-2 bg-[#070B0B] border border-[#EDFCFE0F] text-nowrap px-5 py-2.5">
+                  <div className="flex items-center gap-2">
+                    <Image
+                      src="/icons/WarningDiamond.svg"
+                      alt="Diamond"
+                      width={20}
+                      height={20}
+                    />
+
+                    <span className="text-[10px] font-semibold tracking-[0.01em] text-[#F2F4F5]">
+                      Risk
+                    </span>
+                  </div>
+                  <h2 className="text-[12px] font-semibold tracking-[0.01em] text-[#FCD34D]">
+                    {strategy?.risk}
+                  </h2>
+                </div>
+
+                <div className="flex items-center flex-col w-full sm:w-[142px] rounded-md gap-2 bg-[#070B0B] border border-[#EDFCFE0F] text-nowrap px-5 py-2.5">
+                  <div className="flex items-center gap-2">
+                    <Image
+                      src="/icons/Drop.svg"
+                      alt="Diamond"
+                      width={20}
+                      height={20}
+                    />
+
+                    <span className="text-[10px] font-semibold tracking-[0.01em] text-[#F2F4F5]">
+                      Performance
+                    </span>
+                  </div>
+                  <h2 className="text-[12px] font-semibold tracking-[0.01em] text-[#46FFD7]">
+                    {strategy?.performance}
+                  </h2>
                 </div>
               </div>
-              <button>Join Strategy</button>
+
+              <Button
+                variant="outline"
+                className="bg-[#1FE9F7] text-[#090909] px-12 py-5 rounded-md border-none outline-none hover:bg-[#1FE9F7]/80 cursor-pointer"
+              >
+                Join Strategy
+              </Button>
+            </div>
+          </div>
+
+          <Image
+            src="/bar.svg"
+            alt="Bar chart"
+            width={1000}
+            height={1000}
+            className="w-full mt-4"
+          />
+        </div>
+
+        {/* Strategy Description and Steps */}
+        <section className="mb-20 rounded-[24px] border border-[#EDFCFE0F] bg-[#EDFCFE0F] px-10 py-8 shadow-[0_28px_56px_rgba(6,24,26,0.35)]">
+          <div className="grid gap-10 md:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-start">
+            <div className="space-y-4">
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#577578]">
+                Description
+              </p>
+              <p className="text-[16px] leading-7 text-[#F2F4F5]">
+                {strategy.summary}
+              </p>
+            </div>
+
+            <span className="hidden h-full w-1 rounded-full bg-[#1DD43914] md:block" />
+
+            <div className="space-y-4">
+              <p className="text-sm font-semibold uppercase tracking-[0.18em] text-[#577578]">
+                Steps
+              </p>
+              <ol className="space-y-1 text-[16px] leading-7 text-[#F2F4F5]">
+                {strategy.steps.map((step, index) => (
+                  <li key={`${strategy.slug}-stacked-step-${index}`}>
+                    <span className="text-[#F2F4F5] ml-3">{index + 1}.</span>{" "}
+                    {step}
+                  </li>
+                ))}
+              </ol>
             </div>
           </div>
         </section>
@@ -133,8 +178,8 @@ export default function StrategyDetailPage({ params }: StrategyPageProps) {
           </div>
 
           <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-            {RELATED.map((strategy) => (
-              <StrategyCard key={strategy.title} {...strategy} />
+            {relatedStrategies.map((related) => (
+              <StrategyCard key={related.slug} {...related} />
             ))}
           </div>
         </section>

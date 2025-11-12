@@ -269,4 +269,8 @@
     opacity: 0.8;
     z-index: -2;
   }
+
+  .bg-glass-blur-md {
+    @apply backdrop-blur-md [background:linear-gradient(135deg,rgba(31,233,247,0.08)_0%,rgba(18,33,33,0.25)_50%,rgba(8,17,18,0.4)_100%)] [box-shadow:0_8px_32px_rgba(6,33,36,0.4),_inset_0_0_12px_rgba(31,233,247,0.12)];
+  }
 }

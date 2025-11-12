@@ -18,7 +18,7 @@ const activeCircleClasses =
 
 const ProgressSteps = ({ steps, currentIndex }: ProgressStepsProps) => {
   return (
-    <div className="flex items-center gap-4 rounded-full border border-[#1FE9F7]/20 bg-[rgba(8,22,24,0.72)] px-7 py-5">
+    <div className="flex items-center gap-4 rounded-full px-7 py-5">
       {steps.map((step, index) => {
         const isActive = index === currentIndex;
         const isLast = index === steps.length - 1;

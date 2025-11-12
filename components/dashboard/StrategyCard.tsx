@@ -2,7 +2,7 @@
 "use client";
 
 import Link from "next/link";
-import { ChartImage } from "./ChartImage";
+// import { ChartImage } from "./ChartImage";
 
 export interface StrategyCardProps {
   title: string;
@@ -25,16 +25,22 @@ const StrategyCard = ({
 }: StrategyCardProps) => {
   return (
     <article className="relative flex min-h-[260px] z-20 flex-col justify-between gap-6 rounded-[28px] border border-[#1FE9F7]/20 px-6 pb-6 text-[#D4F7F9] shadow-[0_20px_36px_rgba(6,33,36,0.35),inset_0_0_18px_rgba(31,233,247,0.08)] [background:radial-gradient(160%_120%_at_50%_0%,rgba(31,233,247,0.25),rgba(3,9,10,0.9)),rgba(8,17,18,0.95)] overflow-hidden">
-      <ChartImage />
+      {/* <ChartImage /> */}
 
       <span className="badge-angled mb-10 mx-auto py-3!">{type}</span>
 
-      <div className="absolute top-28 left-[35%] z-30 bg-[rgba(18,33,33,0.34)] creator-badge rounded-lg px-10 py-2">
+      <div className="absolute top-28 left-[35%] z-30 bg-[rgba(18,33,33,0.72)] creator-badge rounded-lg px-10 py-2">
         <p className="mt-1 text-xs font-medium text-[#5AF3FB]">{creator}</p>
       </div>
 
-      <div className="border mt-6 border-[#1FE9F7]/20 bg-[rgba(18,33,33,0.34)] rounded-lg p-4 ">
-        <div className="relative z-10 flex flex-col space-y-2 mb-2">
+      {/* Strategy Details */}
+      <div
+        className=" mt-6 rounded-lg p-4 
+                bg-[rgba(18,33,33,0.34)] 
+                bg-glass-blur-md
+                "
+      >
+        <div className="relative z-10 flex flex-col space-y-2 mb-2 mt-4">
           <h3 className="text-base font-semibold leading-snug text-[#F2F4F5]">
             {title}
           </h3>
