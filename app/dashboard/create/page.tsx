@@ -1,3 +1,5 @@
+"use client";
+
 import ProgressSteps from "@/components/dashboard/ProgressSteps";
 import { Button } from "@/components/ui/button";
 import {
@@ -7,6 +9,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useRouter } from "next/navigation";
 
 const STEPS = [
   { label: "Strategy Basics" },
@@ -17,6 +20,8 @@ const STEPS = [
 ];
 
 export default function CreateStrategyPage() {
+  const router = useRouter();
+
   return (
     <div className="flex min-h-screen flex-col">
       <main className="flex-1 overflow-y-auto px-4 sm:px-6 md:px-8 lg:px-12 py-6 sm:py-8">
@@ -97,6 +102,7 @@ export default function CreateStrategyPage() {
 
           <div className="mt-8 sm:mt-10 flex flex-col-reverse sm:flex-row items-stretch sm:items-center justify-between gap-3 sm:gap-4">
             <Button
+              onClick={() => router.back()}
               variant="ghost"
               className="rounded-full border border-[#1FE9F7]/30 bg-[#090909] px-8 sm:px-12 lg:px-16 py-4 sm:py-5 lg:py-6 text-xs sm:text-sm font-semibold text-[#1FE9F7] transition hover:text-[#1FE9F7]/80 hover:bg-transparent cursor-pointer w-full sm:w-auto"
             >
@@ -104,7 +110,7 @@ export default function CreateStrategyPage() {
             </Button>
             <Button
               variant="default"
-              className="text-xs sm:text-sm font-medium text-[#1FE9F7] join-strategy-button bg-linear-to-r from-[#045358] to-[#045358] rounded-lg px-8 sm:px-12 lg:px-16 py-4 sm:py-5 lg:py-6 text-center cursor-pointer w-full sm:w-auto"
+              className="text-xs sm:text-sm font-medium text-[#090909] bg-[#1FE9F7] hover:bg-[#1FE9F7]/80 cursor-pointer rounded-lg px-8 sm:px-12 lg:px-16 py-4 sm:py-5 lg:py-6 text-center w-full sm:w-auto"
             >
               Continue
             </Button>

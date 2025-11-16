@@ -3,6 +3,7 @@
 
 import Link from "next/link";
 import { ChartImage } from "./ChartImage";
+import { riskColor } from "@/utils/utils";
 
 export interface StrategyCardProps {
   title: string;
@@ -67,13 +68,17 @@ const StrategyCard = ({
             <span className="text-[10px] sm:text-xs tracking-[0.14em] text-[#D6D7D7]">
               Risk:
             </span>
-            <strong className="text-xs sm:text-sm normal-case tracking-normal text-[#34C759]">
+            <strong
+              className={`text-xs sm:text-sm normal-case tracking-normal ${riskColor(
+                risk
+              )}`}
+            >
               {risk}
             </strong>
           </div>
         </div>
 
-        <div className="relative z-10 mt-3 sm:mt-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 sm:gap-3">
+        <div className="relative z-10 mt-3 sm:mt-4 flex bg-transparent border-none outline-none flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 sm:gap-3">
           <Link
             className="text-xs sm:text-sm font-medium text-[#79AFB3] strategy-badge rounded-lg px-4 sm:px-5 py-2 sm:py-2.5 w-full text-center"
             href={href}
@@ -82,7 +87,7 @@ const StrategyCard = ({
           </Link>
           <Link
             href={href}
-            className="text-xs sm:text-sm font-medium text-[#1FE9F7] join-strategy-button bg-linear-to-r from-[#045358] to-[#045358] rounded-lg px-4 sm:px-5 py-2 sm:py-2.5 w-full text-center"
+            className="text-xs sm:text-sm font-medium text-[#090909] bg-[#1FE9F7] hover:bg-[#1FE9F7]/80 cursor-pointer rounded-lg px-4 sm:px-5 py-2 sm:py-2.5 w-full text-center"
           >
             Join Strategy
           </Link>

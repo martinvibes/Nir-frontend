@@ -85,9 +85,9 @@ const Sidebar = ({ isOpen = false, onClose }: SidebarProps) => {
         />
         <span className="relative">
           {item.label}
-          {isActive && (
+          {/* {isActive && (
             <span className="absolute -bottom-1 left-0 right-0 h-[2px] bg-[#1FE9F7] rounded-full" />
-          )}
+          )} */}
         </span>
       </Link>
     );

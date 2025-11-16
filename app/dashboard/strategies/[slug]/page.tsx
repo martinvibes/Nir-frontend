@@ -6,6 +6,7 @@ import Image from "next/image";
 import StrategyCard from "@/components/dashboard/StrategyCard";
 import { STRATEGIES, getStrategyBySlug } from "@/lib/data/strategies";
 import { Button } from "@/components/ui/button";
+import { riskColor } from "@/utils/utils";
 
 interface StrategyPageProps {
   params: Promise<{ slug: string }>;
@@ -99,7 +100,11 @@ export default async function StrategyDetailPage({
                       Risk
                     </span>
                   </div>
-                  <h2 className="text-[11px] sm:text-[12px] font-semibold tracking-[0.01em] text-[#FCD34D]">
+                  <h2
+                    className={`text-[11px] sm:text-[12px] font-semibold tracking-[0.01em] ${riskColor(
+                      strategy.risk
+                    )}`}
+                  >
                     {strategy?.risk}
                   </h2>
                 </div>
