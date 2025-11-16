@@ -1,7 +1,7 @@
 "use server";
 
 import { createPublicClient, http } from "viem";
-import { inArray, eq } from "drizzle-orm";
+import { inArray, eq, and } from "drizzle-orm";
 
 import { nirChain, nirRpcUrl } from "./chain";
 import { nirContracts } from "./contracts";
@@ -201,7 +201,36 @@ export async function getStrategyDetail(id: number): Promise<StrategyDetail | nu
 
   try {
     const json = JSON.parse(row.aiResponse);
-    const result = strategyFromAiSchema.safeParse(json);
+    let result = strategyFromAiSchema.safeParse(json);
+
+    if (!result.success) {
+      const baseJson = json as { steps?: unknown } | null;
+      const normalized =
+        baseJson && typeof baseJson === "object"
+          ? {
+              ...baseJson,
+              steps: Array.isArray(baseJson.steps)
+                ? baseJson.steps.map((step) => {
+                    const s = step as {
+                      outputToken?: string | null;
+                      marketToken?: string | null;
+                      label?: string | null;
+                      [key: string]: unknown;
+                    };
+                    return {
+                      ...s,
+                      outputToken: s.outputToken ?? null,
+                      marketToken: s.marketToken ?? null,
+                      label: s.label ?? null,
+                    };
+                  })
+                : [],
+            }
+          : json;
+
+      result = strategyFromAiSchema.safeParse(normalized);
+    }
+
     if (result.success) {
       parsed = result.data;
     }

@@ -38,7 +38,7 @@ export default async function StrategyDetailPage({
   const all = await getAllStrategiesWithAi();
   const relatedCards = await Promise.all(
     all
-      .filter((s) => s.id !== overview.id)
+      .filter((s) => s.id !== overview.id && s.ai)
       .slice(0, 3)
       .map(toStrategyCardProps)
   );

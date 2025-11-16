@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { decodeEventLog } from "viem";
 import { useAccount, usePublicClient, useWriteContract } from "wagmi";
 
@@ -10,6 +11,7 @@ import { StrategyFromAi } from "@/lib/strategy-model";
 import { TOKENS, TokenKey } from "@/lib/tokens";
 import { nirContracts } from "@/lib/contracts";
 import { buildStepsFromAi } from "@/lib/encode-strategy";
+import { useToast } from "@/components/ui/toast-provider";
 
 const STEPS = [
   { label: "Prompt" },
@@ -21,13 +23,13 @@ export default function CreateStrategyPage() {
   const { address, isConnected } = useAccount();
   const { writeContractAsync, isPending } = useWriteContract();
   const publicClient = usePublicClient();
+  const router = useRouter();
+  const { toast } = useToast();
 
   const [prompt, setPrompt] = useState("");
   const [aiStrategy, setAiStrategy] = useState<StrategyFromAi | null>(null);
-  const [dbStrategyId, setDbStrategyId] = useState<number | null>(null);
   const [generating, setGenerating] = useState(false);
   const [deploying, setDeploying] = useState(false);
-  const [error, setError] = useState<string | null>(null);
 
   const hasStrategy = !!aiStrategy;
 
@@ -35,9 +37,7 @@ export default function CreateStrategyPage() {
     if (!prompt.trim()) return;
 
     setGenerating(true);
-    setError(null);
     setAiStrategy(null);
-    setDbStrategyId(null);
 
     try {
       const res = await fetch("/api/ai/strategy", {
@@ -50,14 +50,11 @@ export default function CreateStrategyPage() {
         const data = await res.json().catch(() => null);
         throw new Error(data?.error ?? "Failed to generate strategy");
       }
-      const data = (await res.json()) as {
-        id: number | null;
-        strategy: StrategyFromAi;
-      };
+      const data = (await res.json()) as { strategy: StrategyFromAi };
       setAiStrategy(data.strategy);
-      setDbStrategyId(data.id ?? null);
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Unexpected error");
+      const message = e instanceof Error ? e.message : "Unexpected error";
+      toast({ description: message, variant: "error" });
     } finally {
       setGenerating(false);
     }
@@ -66,26 +63,26 @@ export default function CreateStrategyPage() {
   const handleDeploy = async () => {
     if (!aiStrategy) return;
 
-    if (dbStrategyId == null) {
-      setError("Missing strategy reference. Regenerate and try again.");
-      return;
-    }
-
     const tokenKey = aiStrategy.inputToken as TokenKey;
     const token = TOKENS[tokenKey];
 
     if (!token) {
-      setError("AI returned an unsupported input token. Try again.");
+      toast({
+        description: "AI returned an unsupported input token. Try again.",
+        variant: "error",
+      });
       return;
     }
 
     if (!isConnected || !address) {
-      setError("Connect your wallet on BNB testnet to deploy the strategy.");
+      toast({
+        description: "Connect your wallet on BNB testnet to deploy the strategy.",
+        variant: "error",
+      });
       return;
     }
 
     setDeploying(true);
-    setError(null);
 
     try {
       const steps = buildStepsFromAi(aiStrategy);
@@ -116,9 +113,10 @@ export default function CreateStrategyPage() {
               data: log.data,
               topics: log.topics,
             });
+            console.log("[decoded]: ", decoded);
 
             if (decoded.eventName === "StrategyCreated") {
-              const id = decoded.args?.[0];
+              const id = (decoded.args as unknown as { strategyId: bigint })?.strategyId;
               if (id != null) {
                 vaultStrategyId = Number(id);
                 break;
@@ -130,18 +128,34 @@ export default function CreateStrategyPage() {
         }
 
         if (vaultStrategyId != null) {
-          await fetch("/api/strategies/link-vault-id", {
+          const res = await fetch("/api/strategies/create-from-ai", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
-              strategyId: dbStrategyId,
               vaultStrategyId,
+              prompt,
+              strategy: aiStrategy,
             }),
           });
+
+          if (!res.ok) {
+            throw new Error("Failed to save strategy metadata.");
+          }
+
+          toast({
+            title: "Strategy deployed",
+            description: "Strategy deployed successfully.",
+            variant: "success",
+          });
+          router.push(`/dashboard/strategies/${vaultStrategyId}`);
         }
       }
     } catch (e) {
-      setError("Failed to deploy strategy. Check your wallet and try again.");
+      toast({
+        description:
+          "Failed to deploy strategy. Check your wallet and try again.",
+        variant: "error",
+      });
     } finally {
       setDeploying(false);
     }
@@ -221,12 +235,6 @@ export default function CreateStrategyPage() {
               {generating ? "Generating..." : "Generate with AI"}
             </Button>
           </div>
-
-          {error && (
-            <p className="mt-4 text-[12px] sm:text-[13px] text-red-400">
-              {error}
-            </p>
-          )}
 
           {aiStrategy && (
             <div className="mt-8 sm:mt-10 grid gap-6 sm:gap-8 md:grid-cols-[1.4fr_minmax(0,1fr)] items-start">

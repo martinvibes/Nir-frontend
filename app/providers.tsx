@@ -9,6 +9,7 @@ import {
 } from "@rainbow-me/rainbowkit";
 
 import { nirChain, nirChainId, nirRpcUrl } from "@/lib/chain";
+import { ToastProvider } from "@/components/ui/toast-provider";
 
 const wagmiConfig = getDefaultConfig({
     appName: "Nir Finance",
@@ -25,7 +26,9 @@ export const AppProviders = ({ children }: { children: ReactNode }) => {
   return (
     <WagmiProvider config={wagmiConfig}>
       <QueryClientProvider client={queryClient}>
-        <RainbowKitProvider>{children}</RainbowKitProvider>
+        <RainbowKitProvider>
+          <ToastProvider>{children}</ToastProvider>
+        </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>
   );

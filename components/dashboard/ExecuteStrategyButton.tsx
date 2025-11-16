@@ -13,6 +13,7 @@ import { Button } from "@/components/ui/button";
 import { nirContracts } from "@/lib/contracts";
 import { erc20Abi } from "@/lib/erc20-abi";
 import { useTokenDecimals } from "@/lib/useTokenDecimals";
+import { useToast } from "@/components/ui/toast-provider";
 
 interface ExecuteStrategyButtonProps {
   strategyId: number;
@@ -33,16 +34,19 @@ export function ExecuteStrategyButton({
 
   const { decimals } = useTokenDecimals(inputToken as `0x${string}`);
 
-  const { data: rawPosition, refetch: refetchPosition, isLoading: positionLoading } =
-    useReadContract({
-      abi: nirContracts.strategyVault.abi,
-      address: nirContracts.strategyVault.address,
-      functionName: "getUserPosition",
-      args: address ? [address, BigInt(strategyId)] : undefined,
-      query: {
-        enabled: !!address,
-      },
-    });
+  const {
+    data: rawPosition,
+    refetch: refetchPosition,
+    isLoading: positionLoading,
+  } = useReadContract({
+    abi: nirContracts.strategyVault.abi,
+    address: nirContracts.strategyVault.address,
+    functionName: "getUserPosition",
+    args: address ? [address, BigInt(strategyId)] : undefined,
+    query: {
+      enabled: !!address,
+    },
+  });
 
   type PositionTuple = readonly [string, bigint, bigint];
   const position = rawPosition as PositionTuple | undefined;
@@ -54,25 +58,35 @@ export function ExecuteStrategyButton({
   const [slippage, setSlippage] = useState<SlippageOption>("MEDIUM");
   const [joining, setJoining] = useState(false);
   const [exiting, setExiting] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const { toast } = useToast();
 
   const handleJoin = async () => {
     if (disabled) return;
 
     if (!isConnected || !address) {
-      setError("Connect your wallet on BNB testnet to join this strategy.");
+      toast({
+        description:
+          "Connect your wallet on BNB testnet to join this strategy.",
+        variant: "error",
+      });
       return;
     }
 
     if (hasPosition) {
-      setError("You already have an open position in this strategy.");
+      toast({
+        description: "You already have an open position in this strategy.",
+        variant: "error",
+      });
       return;
     }
 
     const value = amountInput.trim();
 
     if (!value || Number(value) <= 0) {
-      setError("Enter a valid amount to invest.");
+      toast({
+        description: "Enter a valid amount to invest.",
+        variant: "error",
+      });
       return;
     }
 
@@ -81,15 +95,13 @@ export function ExecuteStrategyButton({
     try {
       amount = parseUnits(value, decimals);
     } catch {
-      setError("Invalid amount format.");
+      toast({ description: "Invalid amount format.", variant: "error" });
       return;
     }
 
-    const slippageValue =
-      slippage === "LOW" ? 0 : slippage === "HIGH" ? 2 : 1;
+    const slippageValue = slippage === "LOW" ? 0 : slippage === "HIGH" ? 2 : 1;
 
     setJoining(true);
-    setError(null);
 
     try {
       const approveHash = await writeContractAsync({
@@ -111,12 +123,30 @@ export function ExecuteStrategyButton({
       });
 
       if (publicClient) {
-        await publicClient.waitForTransactionReceipt({ hash: executeHash });
+        const receipt = await publicClient.waitForTransactionReceipt({
+          hash: executeHash,
+        });
+        console.log("[receipt]: ", receipt);
+        if (receipt.status === "success") {
+          await refetchPosition();
+          toast({
+            title: "Joined strategy",
+            description: "Join transaction confirmed.",
+            variant: "success",
+          });
+        } else {
+          toast({
+            description: "Join transaction failed.",
+            variant: "error",
+          });
+        }
       }
-
-      await refetchPosition();
     } catch {
-      setError("Failed to join strategy. Check your wallet and try again.");
+      toast({
+        description:
+          "Failed to join strategy. Check your wallet and try again.",
+        variant: "error",
+      });
     } finally {
       setJoining(false);
     }
@@ -124,17 +154,23 @@ export function ExecuteStrategyButton({
 
   const handleExit = async () => {
     if (!isConnected || !address) {
-      setError("Connect your wallet on BNB testnet to exit this strategy.");
+      toast({
+        description:
+          "Connect your wallet on BNB testnet to exit this strategy.",
+        variant: "error",
+      });
       return;
     }
 
     if (!hasPosition) {
-      setError("You do not have an open position in this strategy.");
+      toast({
+        description: "You do not have an open position in this strategy.",
+        variant: "error",
+      });
       return;
     }
 
     setExiting(true);
-    setError(null);
 
     try {
       const exitHash = await writeContractAsync({
@@ -149,8 +185,18 @@ export function ExecuteStrategyButton({
       }
 
       await refetchPosition();
+
+      toast({
+        title: "Exited strategy",
+        description: "Exit transaction confirmed.",
+        variant: "success",
+      });
     } catch {
-      setError("Failed to exit strategy. Check your wallet and try again.");
+      toast({
+        description:
+          "Failed to exit strategy. Check your wallet and try again.",
+        variant: "error",
+      });
     } finally {
       setExiting(false);
     }
@@ -223,23 +269,19 @@ export function ExecuteStrategyButton({
 
       {address && (
         <div className="text-[11px] sm:text-[12px] text-[#ADBEBF]">
-          {positionLoading
-            ? "Loading current position..."
-            : hasPosition && formattedPositionAmount && positionToken
-            ? (
-                <>
-                  Current position: {formattedPositionAmount} at
-                  <span className="ml-1 font-mono text-xs">
-                    {positionToken.slice(0, 6)}...{positionToken.slice(-4)}
-                  </span>
-                </>
-              )
-            : "No open position in this strategy."}
+          {positionLoading ? (
+            "Loading current position..."
+          ) : hasPosition && formattedPositionAmount && positionToken ? (
+            <>
+              Current position: {formattedPositionAmount} at
+              <span className="ml-1 font-mono text-xs">
+                {positionToken.slice(0, 6)}...{positionToken.slice(-4)}
+              </span>
+            </>
+          ) : (
+            "No open position in this strategy."
+          )}
         </div>
-      )}
-
-      {error && (
-        <span className="text-[11px] sm:text-[12px] text-red-400">{error}</span>
       )}
     </div>
   );

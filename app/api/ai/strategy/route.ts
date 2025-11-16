@@ -4,7 +4,7 @@ import { generateObject } from "ai";
 
 import { AI_MODEL_ID, ANON_USER_COOKIE } from "@/lib/constants";
 import { strategyFromAiSchema } from "@/lib/strategy-model";
-import { db, strategies, chatMessages } from "@/db/client";
+import { db, chatMessages } from "@/db/client";
 import { ensureUser } from "@/db/user";
 
 const openrouter = createOpenRouter({
@@ -54,21 +54,6 @@ export async function POST(req: NextRequest) {
 
   const strategy = strategyFromAiSchema.parse(object);
 
-  const [inserted] = await db
-    .insert(strategies)
-    .values({
-      userId,
-      name: strategy.name,
-      description: strategy.description,
-      summary: strategy.summary,
-      riskLevel: strategy.riskLevel,
-      inputToken: strategy.inputToken,
-      aiModel: AI_MODEL_ID,
-      aiRequest: userPrompt,
-      aiResponse: JSON.stringify(strategy),
-    })
-    .returning({ id: strategies.id });
-
   await db.insert(chatMessages).values({
     userId,
     role: "user",
@@ -81,5 +66,5 @@ export async function POST(req: NextRequest) {
     content: JSON.stringify(strategy),
   });
 
-  return NextResponse.json({ id: inserted?.id ?? null, strategy });
+  return NextResponse.json({ strategy });
 }
