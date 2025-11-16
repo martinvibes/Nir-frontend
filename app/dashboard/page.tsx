@@ -1,3 +1,4 @@
+"use client";
 import Image from "next/image";
 
 import TimeRangeToggle from "@/components/dashboard/TimeRangeToggle";
@@ -38,7 +39,16 @@ export default async function DashboardHomePage() {
             </h3>
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center mt-3 gap-4 sm:justify-between">
-              <div className="w-full sm:w-auto">
+              {/* Mobile-only image (first on mobile) */}
+              <Image
+                src="/bar.svg"
+                alt="Bar chart"
+                width={1000}
+                height={1000}
+                className="block sm:hidden w-full h-[150px] object-cover"
+              />
+
+              <div className="w-full sm:w-auto order-2 md:order-1">
                 <h1 className="text-[24px] sm:text-[28px] lg:text-[32px] font-semibold tracking-[0.01em] text-[#F2F4F5]">
                   {featured?.title ?? "No strategies yet"}
                 </h1>
@@ -57,7 +67,7 @@ export default async function DashboardHomePage() {
                 </div>
               </div>
 
-              <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto">
+              <div className="flex flex-wrap items-center gap-2 w-full sm:w-auto order-3 sm:order-2">
                 <div className="flex items-center flex-col w-full sm:w-[120px] lg:w-[142px] rounded-md gap-2 bg-[#070B0B] border border-[#EDFCFE0F] px-3 sm:px-5 py-2 sm:py-2.5">
                   <div className="flex items-center gap-2">
                     <Image
@@ -119,12 +129,13 @@ export default async function DashboardHomePage() {
               </div>
             </div>
 
+            {/* Desktop/tablet image (below the row, preserved original layout) */}
             <Image
               src="/bar.svg"
               alt="Bar chart"
               width={1000}
               height={1000}
-              className="w-full h-[150px] sm:h-[180px] md:h-auto mt-4 object-cover md:object-contain"
+              className="hidden sm:block w-full h-[180px] md:h-auto mt-4 object-cover md:object-contain"
             />
           </div>
         </section>

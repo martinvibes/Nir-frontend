@@ -2,8 +2,9 @@
 "use client";
 
 import Link from "next/link";
-// import { ChartImage } from "./ChartImage";
+import { ChartImage } from "./ChartImage";
 import type { StrategyCardProps } from "@/lib/strategy-types";
+import { riskColor } from "@/utils/utils";
 
 const StrategyCard = ({
   title,
@@ -16,7 +17,7 @@ const StrategyCard = ({
 }: StrategyCardProps) => {
   return (
     <article className="relative flex min-h-[280px] sm:min-h-[300px] z-20 flex-col justify-between gap-4 sm:gap-6 rounded-[24px] sm:rounded-[28px] border border-[#1FE9F7]/20 px-4 sm:px-6 pb-4 sm:pb-6 text-[#D4F7F9] shadow-[0_20px_36px_rgba(6,33,36,0.35),inset_0_0_18px_rgba(31,233,247,0.08)] [background:radial-gradient(160%_120%_at_50%_0%,rgba(31,233,247,0.25),rgba(3,9,10,0.9)),rgba(8,17,18,0.95)] overflow-hidden">
-      {/* <ChartImage /> */}
+      <ChartImage />
 
       <span className="badge-angled mb-6 sm:mb-10 mx-auto py-2 sm:py-3 text-[11px] sm:text-xs">
         {type}
@@ -39,7 +40,7 @@ const StrategyCard = ({
           <h3 className="text-sm sm:text-base font-semibold leading-snug text-[#F2F4F5]">
             {title}
           </h3>
-          <p className="relative z-10 text-[10px] sm:text-xs text-wrap text-[#ADBEBF] leading-relaxed">
+          <p className="relative z-10 h-[70px] text-[10px] sm:text-xs text-wrap text-[#ADBEBF] leading-relaxed">
             {description}
           </p>
         </div>
@@ -58,13 +59,17 @@ const StrategyCard = ({
             <span className="text-[10px] sm:text-xs tracking-[0.14em] text-[#D6D7D7]">
               Risk:
             </span>
-            <strong className="text-xs sm:text-sm normal-case tracking-normal text-[#34C759]">
+            <strong
+              className={`text-xs sm:text-sm normal-case tracking-normal ${riskColor(
+                risk
+              )}`}
+            >
               {risk}
             </strong>
           </div>
         </div>
 
-        <div className="relative z-10 mt-3 sm:mt-4 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 sm:gap-3">
+        <div className="relative z-10 mt-3 sm:mt-4 flex bg-transparent border-none outline-none flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2 sm:gap-3">
           <Link
             className="text-xs sm:text-sm font-medium text-[#79AFB3] strategy-badge rounded-lg px-4 sm:px-5 py-2 sm:py-2.5 w-full text-center"
             href={href}
@@ -73,7 +78,7 @@ const StrategyCard = ({
           </Link>
           <Link
             href={href}
-            className="text-xs sm:text-sm font-medium text-[#1FE9F7] join-strategy-button bg-linear-to-r from-[#045358] to-[#045358] rounded-lg px-4 sm:px-5 py-2 sm:py-2.5 w-full text-center"
+            className="text-xs sm:text-sm font-medium text-[#090909] bg-[#1FE9F7] hover:bg-[#1FE9F7]/80 cursor-pointer rounded-lg px-4 sm:px-5 py-2 sm:py-2.5 w-full text-center"
           >
             Join Strategy
           </Link>
