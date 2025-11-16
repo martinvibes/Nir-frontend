@@ -3,16 +3,7 @@
 
 import Link from "next/link";
 // import { ChartImage } from "./ChartImage";
-
-export interface StrategyCardProps {
-  title: string;
-  type: string;
-  creator: string;
-  description: string;
-  performance: string;
-  risk: string;
-  href?: string;
-}
+import type { StrategyCardProps } from "@/lib/strategy-types";
 
 const StrategyCard = ({
   title,

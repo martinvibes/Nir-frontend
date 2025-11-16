@@ -6,7 +6,7 @@ import { ensureUser, linkWalletToUser } from "@/db/user";
 export async function POST(req: NextRequest) {
   const body = await req.json();
   const address = body?.address as string | undefined;
-  const signature = body?.signature as string | undefined;
+  const signature = body?.signature as `0x${string}` | undefined;
 
   if (!address || !signature) {
     return NextResponse.json({ error: "Invalid payload" }, { status: 400 });
