@@ -12,11 +12,11 @@ export const riskLevelSchema = z.enum(["low", "medium", "high"]);
 export const strategyStepSchema = z.object({
   action: actionTypeSchema,
   // For SWAP actions, outputToken is required.
-  outputToken: z.string().optional(),
+  outputToken: z.string().nullable(),
   // For SUPPLY/BORROW/WITHDRAW/REDEEM, marketToken (e.g. vToken) is required.
-  marketToken: z.string().optional(),
+  marketToken: z.string().nullable(),
   // Optional human readable description of the step.
-  label: z.string().optional(),
+  label: z.string().nullable(),
 });
 
 export const strategyFromAiSchema = z.object({
