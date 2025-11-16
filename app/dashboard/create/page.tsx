@@ -76,7 +76,8 @@ export default function CreateStrategyPage() {
 
     if (!isConnected || !address) {
       toast({
-        description: "Connect your wallet on BNB testnet to deploy the strategy.",
+        description:
+          "Connect your wallet on BNB testnet to deploy the strategy.",
         variant: "error",
       });
       return;
@@ -96,10 +97,11 @@ export default function CreateStrategyPage() {
 
       if (publicClient) {
         const receipt = await publicClient.waitForTransactionReceipt({ hash });
-        
+
         if (receipt.status === "reverted") {
           toast({
-            description: "Failed to deploy strategy. Check your wallet and try again.",
+            description:
+              "Failed to deploy strategy. Check your wallet and try again.",
             variant: "error",
           });
           return;
@@ -124,7 +126,8 @@ export default function CreateStrategyPage() {
             console.log("[decoded]: ", decoded);
 
             if (decoded.eventName === "StrategyCreated") {
-              const id = (decoded.args as unknown as { strategyId: bigint })?.strategyId;
+              const id = (decoded.args as unknown as { strategyId: bigint })
+                ?.strategyId;
               if (id != null) {
                 vaultStrategyId = Number(id);
                 break;
@@ -236,7 +239,7 @@ export default function CreateStrategyPage() {
             <Button
               type="button"
               variant="default"
-              className="text-xs sm:text-sm font-medium text-[#1FE9F7] join-strategy-button bg-linear-to-r from-[#045358] to-[#045358] rounded-lg px-8 sm:px-12 lg:px-16 py-4 sm:py-5 lg:py-6 text-center cursor-pointer w-full sm:w-auto"
+              className="text-xs sm:text-sm font-medium text-[#090909] bg-[#1FE9F7] hover:bg-[#1FE9F7]/80 rounded-lg px-8 sm:px-12 lg:px-16 py-4 sm:py-5 lg:py-6 text-center cursor-pointer w-full sm:w-auto"
               onClick={handleGenerate}
               disabled={generating || !prompt.trim()}
             >
@@ -272,7 +275,7 @@ export default function CreateStrategyPage() {
                     {aiStrategy.riskLevel}
                   </p>
                   <p>
-                    <span className="text-[#89A8AA]">Steps:</span> {" "}
+                    <span className="text-[#89A8AA]">Steps:</span>{" "}
                     {aiStrategy.steps.length}
                   </p>
                 </div>
@@ -280,7 +283,7 @@ export default function CreateStrategyPage() {
                 <Button
                   type="button"
                   variant="default"
-                  className="mt-2 text-xs sm:text-sm font-medium text-[#1FE9F7] join-strategy-button bg-linear-to-r from-[#045358] to-[#045358] rounded-lg px-6 sm:px-10 py-3 sm:py-4 text-center cursor-pointer w-full"
+                  className="mt-2 text-xs sm:text-sm font-medium text-[#090909] bg-[#1FE9F7] hover:bg-[#1FE9F7]/80 rounded-lg px-6 sm:px-10 py-3 sm:py-4 text-center cursor-pointer w-full"
                   onClick={handleDeploy}
                   disabled={deploying || isPending}
                 >
@@ -297,9 +300,7 @@ export default function CreateStrategyPage() {
                 <ol className="space-y-1 text-[13px] sm:text-[14px] text-[#F2F4F5]">
                   {aiStrategy.steps.map((step, index) => (
                     <li key={index}>
-                      <span className="text-[#89A8AA] mr-2">
-                        {index + 1}.
-                      </span>
+                      <span className="text-[#89A8AA] mr-2">{index + 1}.</span>
                       <span className="uppercase text-[11px] tracking-[0.16em] text-[#5efbff] mr-2">
                         {step.action}
                       </span>
